@@ -1,0 +1,55 @@
+version: '2'
+services:
+    web:
+        build: ../web-gestion-y-seguimiento-de-tramites/
+        image: gestraweb-img
+        container_name: 
+            gestraweb
+        ports:
+            - 80:80
+    mysql:
+        build: ./database/
+        image: mysql-gestor-tramites-img
+        container_name: 
+            mysql-gestor-tramites
+        ports:
+            - 3306:3306
+        environment:
+            MYSQL_ROOT_PASSWORD: Lorenzo911$$
+        volumes:
+            - /storage/docker/mysql-datadir:/var/lib/mysql
+        networks:
+            ges-tra-net:
+                ipv4_address: 172.25.0.2
+    api:
+        build: .
+        image: gestraapi-img
+        container_name: 
+            gestraapi
+        ports:
+            - 3000:3000
+        links:
+            - mysql
+            - apir1
+        networks:
+            ges-tra-net:
+                ipv4_address: 172.25.0.3
+    apir1:
+        build: ../../../R1Common/
+        image: r1-rest-services-img
+        container_name: 
+            r1restservices
+        ports:
+            - 3001:3001
+        links:
+            - mysql
+        networks:
+            ges-tra-net:
+                ipv4_address: 172.25.0.4
+
+networks:
+  ges-tra-net:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.25.0.0/24
