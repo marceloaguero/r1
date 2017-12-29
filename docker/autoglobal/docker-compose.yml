@@ -7,7 +7,7 @@ services:
     networks:
       - backend
     environment:
-      - MYSQL_ROOT_PASSWORD=Lorenzo911$
+      - MYSQL_ROOT_PASSWORD=Lorenzo911$$
     deploy:
       restart_policy:
         condition: on-failure
