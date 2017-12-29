@@ -2,18 +2,34 @@ version: "3.2"
 services:
   db:
     image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=Lorenzo911$$
     volumes: 
       - autoglobal-db-data:/var/lib/mysql
     networks:
       - backend
-    environment:
-      - MYSQL_ROOT_PASSWORD=Lorenzo911$$
     deploy:
       restart_policy:
         condition: on-failure
+  web:
+    image: wordpress:4.9.1-php7.0-apache
+    environment:
+      - WORDPRESS_DB_HOST=db
+      - WORDPRESS_DB_PASSWORD=Lorenzo911$$
+    volumes:
+      - autoglobal-wp-html:/var/www/html
+    networks:
+      - backend
+      - proxy
+    ports:
+      - 80:80
 volumes:
   autoglobal-db-data:
+    external: true
+  autoglobal-wp-html:
     external: true
 networks:
   backend:
     external: false
+  proxy:
+    external: true
