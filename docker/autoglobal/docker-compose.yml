@@ -19,8 +19,18 @@ services:
     networks:
       - backend
       - proxy
-    ports:
-      - 80:80
+    deploy:
+      labels:
+        - com.df.notify=true
+        - com.df.distribute=true
+        - com.df.serviceDomain=www.autoglobal.com.ar,autoglobal.com.ar
+        - com.df.servicePath=/
+        - com.df.port=80
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
   api:
     image: r1group/autoglobal-api-img:1.0.0
     volumes:
@@ -28,8 +38,18 @@ services:
     networks:
       - backend
       - proxy
-    ports:
-      - 3333:3333
+    deploy:
+      labels:
+        - com.df.notify=true
+        - com.df.distribute=true
+        - com.df.serviceDomain=api.autoglobal.com.ar
+        - com.df.servicePath=/
+        - com.df.port=3333
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
 volumes:
   autoglobal-db-data:
     external: true
