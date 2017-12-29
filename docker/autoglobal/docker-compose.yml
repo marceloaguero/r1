@@ -1,0 +1,19 @@
+version: "3.2"
+services:
+  db:
+    image: mysql:5.7
+    volumes: 
+      - autoglobal-db-data:/var/lib/mysql
+    networks:
+      - backend
+    secrets:
+      - autoglobal-mysql_root_password
+    deploy:
+      restart_policy:
+        condition: on-failure
+volumes:
+  autoglobal-db-data:
+    external: true
+networks:
+  backend:
+    external: false
