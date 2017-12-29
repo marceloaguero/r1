@@ -6,8 +6,8 @@ services:
       - autoglobal-db-data:/var/lib/mysql
     networks:
       - backend
-    secrets:
-      - autoglobal-mysql_root_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=Lorenzo911$
     deploy:
       restart_policy:
         condition: on-failure
