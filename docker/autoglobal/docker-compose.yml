@@ -16,8 +16,8 @@ services:
     environment:
       - WORDPRESS_DB_HOST=db
       - WORDPRESS_DB_PASSWORD=Lorenzo911$$
-#    volumes:
-#      - autoglobal-wp-html:/var/www/html
+    volumes:
+      - autoglobal-wp-html:/var/www/html
     networks:
       - backend
       - proxy
@@ -26,8 +26,8 @@ services:
 volumes:
   autoglobal-db-data:
     external: true
-#  autoglobal-wp-html:
-#    external: true
+  autoglobal-wp-html:
+    external: true
 networks:
   backend:
     external: false
