@@ -24,6 +24,11 @@ services:
       - proxy
     ports:
       - 80:80
+  api:
+    image: r1group/autoglobal-api-img:1.0.0
+    networks:
+      - backend
+      - proxy
 volumes:
   autoglobal-db-data:
     external: true
