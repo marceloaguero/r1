@@ -23,6 +23,8 @@ services:
       - 80:80
   api:
     image: r1group/autoglobal-api-img:1.0.0
+    volumes:
+      - autoglobal-wp-uploads:/usr/app/common/models/imagenesQuiter
     networks:
       - backend
       - proxy
