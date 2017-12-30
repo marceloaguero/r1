@@ -2,8 +2,10 @@ version: "3.2"
 services:
   mysql:
     image: mysql:5.7
+    secrets:
+      - autoglobal-mysql-root-password
     environment:
-      - MYSQL_ROOT_PASSWORD=Lorenzo911$$
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/autoglobal-mysql-root-password
     volumes: 
       - autoglobal-db-data:/var/lib/mysql
     networks:
@@ -50,6 +52,9 @@ services:
         delay: 10s
       restart_policy:
         condition: on-failure
+secrets:
+  autoglobal-mysql-root-password:
+    external: true
 volumes:
   autoglobal-db-data:
     external: true
