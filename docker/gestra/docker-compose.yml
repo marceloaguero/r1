@@ -1,59 +1,24 @@
 version: "3.2"
 services:
-  db:
-    image: r1group/gestra-mysql
-    volumes:
+  mysql:
+    image: mysql:5.7
+    secrets:
+      - gestra-mysql-root-password
+    environment:
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/gestra-mysql-root-password
+    volumes: 
       - gestra-db-data:/var/lib/mysql
     networks:
       - backend
-    secrets:
-      - gestra-mysql_root_password
     deploy:
       restart_policy:
         condition: on-failure
-  api:
-    image: r1group/gestra-api
-    environment:
-      - NODE_ENV=prod
-    networks:
-      - backend
-      - proxy
-    deploy:
-      replicas: 1
-      labels:
-        - com.df.notify=true
-        - com.df.distribute=true
-        - com.df.serviceDomain=gestraapi.autogsm.com.ar
-        - com.df.servicePath=/
-        - com.df.port=3000
-      update_config:
-        parallelism: 1
-        delay: 10s
-      restart_policy:
-        condition: on-failure
-  web:
-    image: r1group/gestra-web
-    networks:
-      - backend
-      - proxy
-    deploy:
-      replicas: 1
-      labels:
-        - com.df.notify=true
-        - com.df.distribute=true
-        - com.df.serviceDomain=tramites.autogsm.com.ar
-        - com.df.servicePath=/
-        - com.df.port=80
-      update_config:
-        parallelism: 1
-        delay: 10s
-      restart_policy:
-        condition: on-failure
+secrets:
+  gestra-mysql-root-password:
+    external: true
 volumes:
   gestra-db-data:
     external: true
 networks:
   backend:
     external: false
-  proxy:
-    external: true
