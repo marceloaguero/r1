@@ -13,6 +13,41 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+  api:
+    image: gestraapi-img
+    networks:
+      - backend
+      - proxy
+      - r1restservices
+    deploy:
+      labels:
+        - com.df.notify=true
+        - com.df.distribute=true
+        - com.df.serviceDomain=api.tramites.autogsm.com.ar
+        - com.df.servicePath=/
+        - com.df.port=3000
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+  web:
+    image: gestraweb-img
+    networks:
+      - backend
+      - proxy
+    deploy:
+      labels:
+        - com.df.notify=true
+        - com.df.distribute=true
+        - com.df.serviceDomain=tramites.autogsm.com.ar
+        - com.df.servicePath=/
+        - com.df.port=80
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure      
 secrets:
   gestra-mysql-root-password:
     external: true
@@ -22,3 +57,7 @@ volumes:
 networks:
   backend:
     external: false
+  proxy:
+    external: true
+  r1restservices:
+    external: true
