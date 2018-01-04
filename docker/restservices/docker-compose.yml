@@ -1,0 +1,44 @@
+version: "3.2"
+services:
+  mysql-restservices:
+    image: mysql:5.7
+    secrets:
+      - restservices-mysql-root-password
+    environment:
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/restservices-mysql-root-password
+    volumes: 
+      - restservices-db-data:/var/lib/mysql
+    networks:
+      - backend
+      - proxy
+    deploy:
+      restart_policy:
+        condition: on-failure
+  api:
+    image: r1-rest-services-img
+    networks:
+      - backend
+      - proxy
+    deploy:
+      labels:
+        - com.df.notify=true
+        - com.df.distribute=true
+        - com.df.serviceDomain=api.restservices
+        - com.df.servicePath=/
+        - com.df.port=3001
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+secrets:
+  restservices-mysql-root-password:
+    external: true
+volumes:
+  restservices-db-data:
+    external: true
+networks:
+  backend:
+    external: false
+  proxy:
+    external: true
